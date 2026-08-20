@@ -1,0 +1,691 @@
+/* ===== Food Card Styles ===== */
+
+.food-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.food-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.food-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.food-card:hover .food-img {
+  transform: scale(1.08);
+}
+
+.food-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.food-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2d3436;
+  margin: 8px 0 4px;
+  text-align: center;
+}
+
+.food-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #27ae60;
+  text-align: center;
+  margin: 0;
+}
+
+.food-btn {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.food-btn:hover {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: #fff;
+  transform: scale(1.03);
+}
+
+.food-btn:active {
+  transform: scale(0.97);
+}
+
+/* ===== Category Filter Buttons ===== */
+
+.category-btn {
+  padding: 8px 22px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 2px solid #27ae60;
+  transition: all 0.3s ease;
+}
+
+.category-btn.active {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.category-btn:not(.active) {
+  background: transparent;
+  color: #27ae60;
+}
+
+.category-btn:not(.active):hover {
+  background: #27ae60;
+  color: #fff;
+}
+
+/* ===== Menu Search ===== */
+
+.menu-search .form-control {
+  border-radius: 12px 0 0 12px;
+  padding: 10px 16px;
+  border: 2px solid #ddd;
+  font-size: 15px;
+}
+
+.menu-search .form-control:focus {
+  border-color: #27ae60;
+  box-shadow: none;
+}
+
+.menu-search .btn {
+  border-radius: 0 12px 12px 0;
+  padding: 10px 24px;
+  font-weight: 600;
+}
+
+/* ===== Payment Card ===== */
+
+.payment-card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.payment-card .card-body {
+  padding: 40px;
+}
+
+.payment-radio {
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s, background 0.3s;
+  cursor: pointer;
+}
+
+.payment-radio:hover {
+  border-color: #27ae60;
+  background: #f8fff9;
+}
+
+.payment-radio.selected {
+  border-color: #27ae60;
+  background: #eafaf1;
+}
+
+/* ===== Auth Pages (Login / Register) ===== */
+
+.auth-card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card .card-body {
+  padding: 40px;
+}
+
+.auth-card h2 {
+  color: #2d3436;
+  font-weight: 700;
+}
+
+.auth-card .form-control {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  font-size: 15px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.auth-card .form-control:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+}
+
+.auth-card .form-label {
+  font-weight: 600;
+  color: #2d3436;
+  font-size: 14px;
+}
+
+.auth-card .btn {
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ===== Profile Page ===== */
+
+.profile-card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.profile-card .card-body {
+  padding: 40px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 48px;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(39, 174, 96, 0.3);
+}
+
+.profile-info-item {
+  padding: 14px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-info-item .label {
+  font-weight: 600;
+  color: #636e72;
+  font-size: 14px;
+}
+
+.profile-info-item .value {
+  font-weight: 600;
+  color: #2d3436;
+  font-size: 16px;
+}
+
+/* ===== Dashboard Page ===== */
+
+.dashboard-stat-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-stat-card .card-body {
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.dashboard-stat-card h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #636e72;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.dashboard-stat-card h2 {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.dashboard-stat-card.foods h2 { color: #27ae60; }
+.dashboard-stat-card.orders h2 { color: #2980b9; }
+.dashboard-stat-card.revenue h2 { color: #e67e22; }
+
+.dashboard-chart-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Food Management Page ===== */
+
+.fm-search {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+.fm-search:focus {
+  border-color: #27ae60;
+  box-shadow: none;
+}
+
+.fm-edit-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(39, 174, 96, 0.12);
+  border-left: 4px solid #27ae60;
+}
+
+.fm-edit-card .form-control {
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 2px solid #e9ecef;
+}
+
+.fm-edit-card .form-control:focus {
+  border-color: #27ae60;
+  box-shadow: none;
+}
+
+.fm-table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.fm-table thead {
+  background: #2d3436;
+}
+
+.fm-table thead th {
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fm-table tbody tr {
+  transition: background 0.2s;
+}
+
+.fm-table tbody tr:hover {
+  background: #f0fff4;
+}
+
+/* ===== Orders Page ===== */
+
+.orders-table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.orders-table thead {
+  background: #2d3436;
+}
+
+.orders-table thead th {
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orders-table tbody tr {
+  transition: background 0.2s;
+}
+
+.orders-table tbody tr:hover {
+  background: #f0fff4;
+}
+
+/* ===== Cart Page ===== */
+
+.cart-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cart-card thead {
+  background: #2d3436;
+}
+
+.cart-card thead th {
+  border: none;
+  font-weight: 600;
+}
+
+.cart-total-bar {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-total-bar h4 {
+  margin: 0;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.cart-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.cart-empty h4 {
+  color: #636e72;
+  margin-bottom: 20px;
+}
+
+/* ===== Checkout Page ===== */
+
+.checkout-card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.checkout-card .card-body {
+  padding: 40px;
+}
+
+/* ===== Contact Page ===== */
+
+.contact-card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.contact-card .card-body {
+  padding: 40px;
+}
+
+.contact-info-row {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-info-row:last-child {
+  border-bottom: none;
+}
+
+.contact-info-row .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eafaf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #27ae60;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.contact-form .form-control {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s;
+}
+
+.contact-form .form-control:focus {
+  border-color: #27ae60;
+  box-shadow: none;
+}
+
+/* ===== Navbar Styles ===== */
+
+.navbar-custom {
+  background: #2d3436;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-custom .navbar-brand {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.navbar-custom .nav-link {
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #27ae60 !important;
+}
+
+/* ===== Add Food Page ===== */
+
+.add-food-card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.add-food-card .card-body {
+  padding: 40px;
+}
+
+.add-food-card .form-control,
+.add-food-card .form-select {
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s;
+}
+
+.add-food-card .form-control:focus,
+.add-food-card .form-select:focus {
+  border-color: #27ae60;
+  box-shadow: none;
+}
+
+/* ===== General Button Styles ===== */
+
+.btn-primary {
+  background: linear-gradient(135deg, #2980b9, #3498db);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #2471a3, #2980b9);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #229954, #27ae60);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  border: none;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #a93226, #c0392b);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f39c12, #f1c40f);
+  border: none;
+  color: #fff;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #d68910, #f39c12);
+  color: #fff;
+}
+
+/* ===== General Card Styles ===== */
+
+.card {
+  border: none;
+  border-radius: 16px;
+}
+
+/* ===== Badge Improvements ===== */
+
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* ===== Table Improvements ===== */
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.table thead {
+  background: #2d3436;
+}
+
+.table thead th {
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 14px 16px;
+}
+
+.table tbody tr {
+  transition: background 0.2s;
+}
+
+.table tbody tr:hover {
+  background: #f0fff4;
+}
+
+.table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+/* ===== Form Improvements ===== */
+
+.form-control {
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #2d3436;
+  font-size: 14px;
+}
+
+/* ===== Page Title Styles ===== */
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3436;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* ===== Empty State ===== */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #636e72;
+}
+
+.empty-state h5 {
+  color: #636e72;
+  margin-top: 12px;
+}
+
+/* ===== Scrollbar ===== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
