@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import API, { wakeBackend } from "../Services/api";
+import API, { wakeBackend, ensureBackendAwake } from "../Services/api";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
@@ -25,6 +25,12 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    const awake = await ensureBackendAwake();
+    if (!awake) {
+      alert("The server is taking unusually long to start. Please try again in a minute.");
+      return;
+    }
+
     try {
       const response = await API.post("token/", user);
 
@@ -41,10 +47,10 @@ function Login() {
       navigate("/");
     } catch (error) {
       console.error(error);
-      if (!error.response) {
-        alert("Server is waking up (free tier). Please wait ~30s and try again.");
-      } else if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         alert("Invalid Username or Password");
+      } else if (!error.response || [502, 503, 504].includes(error.response.status)) {
+        alert("Server is waking up (free tier). Please wait ~30s and try again.");
       } else {
         alert("Login failed. Please try again. (" + error.response.status + ")");
       }

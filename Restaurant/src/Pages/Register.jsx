@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API, { wakeBackend } from "../Services/api";
+import API, { wakeBackend, ensureBackendAwake } from "../Services/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -25,6 +25,13 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const awake = await ensureBackendAwake();
+    if (!awake) {
+      alert("The server is taking unusually long to start. Please try again in a minute.");
+      return;
+    }
+
     try {
       await API.post("register/", user);
       alert("Registration Successful!");
@@ -37,7 +44,9 @@ function Register() {
       else if (msg?.email) alert("Email: " + msg.email[0]);
       else if (msg?.password) alert("Password: " + msg.password[0]);
       else if (typeof msg?.detail === "string") alert(msg.detail);
-      else if (error.request && !error.response)
+      else if (error.response && [502, 503, 504].includes(error.response.status))
+        alert("Server is waking up (free tier). Please wait ~30s and try again.");
+      else if (!error.response)
         alert("Server is waking up (free tier). Please wait ~30s and try again.");
       else alert("Registration Failed! Please try again.");
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
-import API from "../Services/api";
+import API, { ensureBackendAwake } from "../Services/api";
 
 const CATEGORIES = ["All", "Starters", "Veg", "Non-Veg", "Drinks", "Ice Cream", "Desserts"];
 
@@ -20,12 +20,25 @@ function Menu({ cart, setCart }) {
     try {
       const res = await API.get("foods/");
       setFoods(res.data);
+      setLoading(false);
+      return;
     } catch (error) {
       console.error("Error fetching foods:", error);
-      setLoadError(true);
-    } finally {
-      setLoading(false);
     }
+
+    const awake = await ensureBackendAwake();
+    if (awake) {
+      try {
+        const res = await API.get("foods/");
+        setFoods(res.data);
+        setLoading(false);
+        return;
+      } catch (error) {
+        console.error("Error fetching foods after wake:", error);
+      }
+    }
+    setLoadError(true);
+    setLoading(false);
   };
 
   useEffect(() => {

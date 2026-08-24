@@ -7,11 +7,33 @@ const API = axios.create({
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const isServerUnavailable = (err) =>
+  !err.response || [502, 503, 504].includes(err.response.status);
+
 export const wakeBackend = async () => {
   try {
     await axios.get(API.defaults.baseURL, { timeout: 90000 });
     return true;
-  } catch {
+  } catch (err) {
+    return !isServerUnavailable(err);
+  }
+};
+
+export const ensureBackendAwake = async () => {
+  try {
+    await axios.get(API.defaults.baseURL, { timeout: 10000 });
+    return true;
+  } catch (err) {
+    if (!isServerUnavailable(err)) return true;
+    for (let i = 0; i < 9; i++) {
+      await sleep(6000);
+      try {
+        await axios.get(API.defaults.baseURL, { timeout: 10000 });
+        return true;
+      } catch (pollErr) {
+        if (!isServerUnavailable(pollErr)) return true;
+      }
+    }
     return false;
   }
 };
@@ -35,7 +57,11 @@ API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error.config;
-    if (config && !error.response && !(config._retryCount >= MAX_RETRIES)) {
+    if (
+      config &&
+      isServerUnavailable(error) &&
+      !(config._retryCount >= MAX_RETRIES)
+    ) {
       config._retryCount = (config._retryCount || 0) + 1;
       await sleep(RETRY_DELAY_MS);
       return API.request(config);
