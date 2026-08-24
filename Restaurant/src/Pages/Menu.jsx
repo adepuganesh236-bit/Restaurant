@@ -11,16 +11,24 @@ function Menu({ cart, setCart }) {
   const [search, setSearch] = useState("");
   const [foods, setFoods] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  const fetchFoods = async () => {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      const res = await API.get("foods/");
+      setFoods(res.data);
+    } catch (error) {
+      console.error("Error fetching foods:", error);
+      setLoadError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchFoods = async () => {
-      try {
-        const res = await API.get("foods/");
-        setFoods(res.data);
-      } catch (error) {
-        console.error("Error fetching foods:", error);
-      }
-    };
     fetchFoods();
   }, []);
 
@@ -86,7 +94,27 @@ function Menu({ cart, setCart }) {
 
         {/* Food Items */}
         <div className="row">
-          {filteredFoods.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-success" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-3 text-muted">
+                Loading menu... (first visit may take up to a minute while the
+                server wakes up)
+              </p>
+            </div>
+          ) : loadError ? (
+            <div className="text-center py-5">
+              <h5 className="text-danger">Could not load the menu.</h5>
+              <p className="text-muted">
+                The free-tier server may be waking up. Please try again.
+              </p>
+              <button className="btn btn-success" onClick={fetchFoods}>
+                Retry
+              </button>
+            </div>
+          ) : filteredFoods.length > 0 ? (
             filteredFoods.map((food) => (
               <div className="col-md-4 col-lg-3 mb-4" key={food.id}>
                 <FoodCard

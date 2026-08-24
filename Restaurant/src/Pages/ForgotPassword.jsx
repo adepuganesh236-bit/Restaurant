@@ -9,7 +9,6 @@ function ForgotPassword() {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [otpFromServer, setOtpFromServer] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSendOtp = async () => {
@@ -20,7 +19,6 @@ function ForgotPassword() {
     setLoading(true);
     try {
       const res = await API.post("send-otp/", { phone });
-      setOtpFromServer(res.data.otp);
       alert("OTP sent! (For testing: " + res.data.otp + ")");
       setStep(2);
     } catch (error) {

@@ -38,7 +38,9 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await API.post("track-logout/");
-    } catch (e) {}
+    } catch {
+      // best-effort - always clear local session
+    }
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     setUser(null);

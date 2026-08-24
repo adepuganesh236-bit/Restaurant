@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { wakeBackend } from "./Services/api";
 
 import Home from "./Pages/Home";
 import Menu from "./Pages/Menu";
@@ -24,6 +26,10 @@ import AdminRoute from "./Components/AdminRoute";
 
 function App() {
   const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    wakeBackend();
+  }, []);
 
   return (
     <Router>

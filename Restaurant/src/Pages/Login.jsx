@@ -27,15 +27,23 @@ function Login() {
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
 
-      await API.post("track-login/", {}, {
-        headers: { Authorization: `Bearer ${response.data.access}` },
-      });
+      try {
+        await API.post("track-login/", {});
+      } catch {
+        // login tracking is optional - never block the login itself
+      }
 
       alert("Login Successful!");
       navigate("/");
     } catch (error) {
       console.error(error);
-      alert("Invalid Username or Password");
+      if (!error.response) {
+        alert("Server is waking up (free tier). Please wait ~30s and try again.");
+      } else if (error.response.status === 401) {
+        alert("Invalid Username or Password");
+      } else {
+        alert("Login failed. Please try again. (" + error.response.status + ")");
+      }
     }
   };
 

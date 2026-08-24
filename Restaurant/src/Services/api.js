@@ -1,33 +1,43 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/",
-  timeout: 90000,
+  baseURL: import.meta.env.VITE_API_URL || "https://restaurant-backend-4phd.onrender.com/api/",
+  timeout: 30000,
 });
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const wakeBackend = async () => {
+  try {
+    await axios.get(API.defaults.baseURL, { timeout: 90000 });
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access");
-    console.log("Token:",token);
-
     config.headers["Bypass-Tunnel-Reminder"] = "true";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log("Headers:", config.headers);
-
     return config;
   },
   (error) => Promise.reject(error)
 );
 
+const MAX_RETRIES = 4;
+const RETRY_DELAY_MS = 4000;
+
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error.config;
-    if (config && !error.response && !config._retried) {
-      config._retried = true;
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+    if (config && !error.response && !(config._retryCount >= MAX_RETRIES)) {
+      config._retryCount = (config._retryCount || 0) + 1;
+      await sleep(RETRY_DELAY_MS);
       return API.request(config);
     }
     return Promise.reject(error);
