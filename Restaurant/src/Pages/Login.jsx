@@ -1,5 +1,5 @@
-import { useState } from "react";
-import API from "../Services/api";
+import { useState, useEffect } from "react";
+import API, { wakeBackend } from "../Services/api";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
@@ -10,6 +10,10 @@ function Login() {
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    wakeBackend();
+  }, []);
 
   const handleChange = (e) => {
     setUser({

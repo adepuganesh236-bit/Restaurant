@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API from "../Services/api";
+import API, { wakeBackend } from "../Services/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -11,6 +11,10 @@ function Register() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    wakeBackend();
+  }, []);
 
   const handleChange = (e) => {
     setUser({
