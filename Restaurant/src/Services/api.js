@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/",
+  timeout: 90000,
 });
 
 API.interceptors.request.use(
@@ -18,6 +19,19 @@ API.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+API.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config;
+    if (config && !error.response && !config._retried) {
+      config._retried = true;
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      return API.request(config);
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default API;
