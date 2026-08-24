@@ -147,6 +147,6 @@ EMAIL_HOST_PASSWORD = "your_gmail_app_password"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-SRATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

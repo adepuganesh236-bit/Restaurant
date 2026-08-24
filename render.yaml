@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: restaurant-backend
+    runtime: python
+    plan: free
+    rootDir: RestaurantBackend
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "gunicorn RestaurantBackend.wsgi:application --bind 0.0.0.0:$PORT"

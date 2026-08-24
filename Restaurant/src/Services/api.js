@@ -9,6 +9,7 @@ API.interceptors.request.use(
     const token = localStorage.getItem("access");
     console.log("Token:",token);
 
+    config.headers["Bypass-Tunnel-Reminder"] = "true";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
