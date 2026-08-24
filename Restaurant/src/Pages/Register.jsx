@@ -31,7 +31,11 @@ function Register() {
       if (msg?.phone) alert("Phone: " + msg.phone[0]);
       else if (msg?.username) alert("Username: " + msg.username[0]);
       else if (msg?.email) alert("Email: " + msg.email[0]);
-      else alert("Registration Failed!");
+      else if (msg?.password) alert("Password: " + msg.password[0]);
+      else if (typeof msg?.detail === "string") alert(msg.detail);
+      else if (error.request && !error.response)
+        alert("Server is waking up (free tier). Please wait ~30s and try again.");
+      else alert("Registration Failed! Please try again.");
     }
   };
 
