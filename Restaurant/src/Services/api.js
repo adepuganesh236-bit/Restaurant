@@ -25,7 +25,8 @@ export const ensureBackendAwake = async () => {
     return true;
   } catch (err) {
     if (!isServerUnavailable(err)) return true;
-    for (let i = 0; i < 9; i++) {
+    const attempts = 20;
+    for (let i = 0; i < attempts; i++) {
       await sleep(6000);
       try {
         await axios.get(API.defaults.baseURL, { timeout: 10000 });

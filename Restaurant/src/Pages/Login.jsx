@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [waking, setWaking] = useState(false);
 
   const [user, setUser] = useState({
     username: "",
@@ -24,12 +25,15 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setWaking(true);
 
     const awake = await ensureBackendAwake();
     if (!awake) {
+      setWaking(false);
       alert("The server is taking unusually long to start. Please try again in a minute.");
       return;
     }
+    setWaking(false);
 
     try {
       const response = await API.post("token/", user);
@@ -101,9 +105,15 @@ function Login() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-success w-100">
-              Login
+            <button type="submit" className="btn btn-success w-100" disabled={waking}>
+              {waking ? "Waking up server..." : "Login"}
             </button>
+
+            {waking && (
+              <p className="text-center text-muted mt-2 mb-0">
+                The free-tier server is cold-starting. This can take up to a minute.
+              </p>
+            )}
 
             <p className="text-center mt-3">
               <Link to="/forgot-password" className="text-decoration-none fw-bold text-danger">

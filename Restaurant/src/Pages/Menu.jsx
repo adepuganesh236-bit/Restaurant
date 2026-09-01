@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
-import API, { ensureBackendAwake } from "../Services/api";
+
+const FOODS_URL = (import.meta.env.VITE_API_URL || "https://restaurant-backend-4phd.onrender.com/api/") + "foods/";
 
 const CATEGORIES = ["All", "Starters", "Veg", "Non-Veg", "Drinks", "Ice Cream", "Desserts"];
 
 const CATEGORY_ORDER = ["Starters", "Veg", "Non-Veg", "Drinks", "Ice Cream", "Desserts"];
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Menu({ cart, setCart }) {
   const [search, setSearch] = useState("");
@@ -17,26 +21,31 @@ function Menu({ cart, setCart }) {
   const fetchFoods = async () => {
     setLoading(true);
     setLoadError(false);
-    try {
-      const res = await API.get("foods/");
-      setFoods(res.data);
-      setLoading(false);
-      return;
-    } catch (error) {
-      console.error("Error fetching foods:", error);
-    }
 
-    const awake = await ensureBackendAwake();
-    if (awake) {
+    const MAX_RETRIES = 5;
+    const delays = [0, 5000, 10000, 15000, 20000];
+    const headers = {};
+    const token = localStorage.getItem("access");
+    if (token) headers.Authorization = `Bearer ${token}`;
+    headers["Bypass-Tunnel-Reminder"] = "true";
+
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      if (attempt > 0) {
+        await sleep(delays[attempt] || delays[delays.length - 1]);
+      }
+
       try {
-        const res = await API.get("foods/");
-        setFoods(res.data);
-        setLoading(false);
-        return;
+        const res = await axios.get(FOODS_URL, { timeout: 15000, headers });
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setFoods(res.data);
+          setLoading(false);
+          return;
+        }
       } catch (error) {
-        console.error("Error fetching foods after wake:", error);
+        console.error(`Menu fetch attempt ${attempt + 1} failed:`, error.message);
       }
     }
+
     setLoadError(true);
     setLoading(false);
   };
@@ -113,17 +122,16 @@ function Menu({ cart, setCart }) {
                 <span className="visually-hidden">Loading...</span>
               </div>
               <p className="mt-3 text-muted">
-                Loading menu... (first visit may take up to a minute while the
-                server wakes up)
+                Waking up the server and loading menu... This may take a moment on first visit.
               </p>
             </div>
           ) : loadError ? (
             <div className="text-center py-5">
               <h5 className="text-danger">Could not load the menu.</h5>
-              <p className="text-muted">
+              <p className="text-muted mb-3">
                 The free-tier server may be waking up. Please try again.
               </p>
-              <button className="btn btn-success" onClick={fetchFoods}>
+              <button className="btn btn-success" onClick={() => fetchFoods()}>
                 Retry
               </button>
             </div>

@@ -11,6 +11,7 @@ function Register() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [waking, setWaking] = useState(false);
 
   useEffect(() => {
     wakeBackend();
@@ -25,12 +26,15 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setWaking(true);
 
     const awake = await ensureBackendAwake();
     if (!awake) {
+      setWaking(false);
       alert("The server is taking unusually long to start. Please try again in a minute.");
       return;
     }
+    setWaking(false);
 
     try {
       await API.post("register/", user);
@@ -119,9 +123,15 @@ function Register() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-success w-100">
-              Register
+            <button type="submit" className="btn btn-success w-100" disabled={waking}>
+              {waking ? "Waking up server..." : "Register"}
             </button>
+
+            {waking && (
+              <p className="text-center text-muted mt-2 mb-0">
+                The free-tier server is cold-starting. This can take up to a minute.
+              </p>
+            )}
 
             <p className="text-center mt-3">
               Already have an account?{" "}
