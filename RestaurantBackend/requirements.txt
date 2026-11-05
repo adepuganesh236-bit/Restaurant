@@ -10,7 +10,7 @@ dj-database-url>=2.3
 gunicorn==26.0.0
 h11==0.16.0
 packaging==26.2
-pillow==12.3.0
+pillow==13.0.0
 psycopg[binary]>=3.2
 PyJWT==2.13.0
 pytz==2026.2
