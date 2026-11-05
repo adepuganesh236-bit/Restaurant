@@ -5,7 +5,6 @@ import API from "../Services/api";
 function Navbar() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [activeUsers, setActiveUsers] = useState(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -19,20 +18,6 @@ function Navbar() {
       }
     };
     fetchUser();
-  }, []);
-
-  useEffect(() => {
-    const fetchActiveUsers = async () => {
-      try {
-        const res = await API.get("active-users/");
-        setActiveUsers(res.data.active_users);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchActiveUsers();
-    const interval = setInterval(fetchActiveUsers, 10000);
-    return () => clearInterval(interval);
   }, []);
 
   const handleLogout = async () => {
@@ -92,12 +77,6 @@ function Navbar() {
           </ul>
 
           <div className="d-flex align-items-center gap-2">
-            {activeUsers > 0 && (
-              <span className="badge bg-success me-2" style={{ fontSize: "13px", padding: "6px 12px" }}>
-                {activeUsers} Online
-              </span>
-            )}
-
             {!user ? (
               <>
                 <Link to="/login" className="btn btn-outline-light btn-sm">Login</Link>

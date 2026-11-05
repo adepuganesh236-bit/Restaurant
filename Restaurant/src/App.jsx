@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import "./App.css";
+
 import { wakeBackend } from "./Services/api";
 
 import Home from "./Pages/Home";
@@ -48,13 +50,31 @@ function App() {
         <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
 
         {/* Orders */}
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/order-history" element={<OrderHistory />} />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order-history"
+          element={
+            <ProtectedRoute>
+              <OrderHistory />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Checkout */}
         <Route
           path="/checkout"
-          element={<Checkout cart={cart} setCart={setCart} />}
+          element={
+            <ProtectedRoute>
+              <Checkout cart={cart} setCart={setCart} />
+            </ProtectedRoute>
+          }
         />
 
         {/* Protected Routes */}

@@ -22,12 +22,8 @@ function Menu({ cart, setCart }) {
     setLoading(true);
     setLoadError(false);
 
-    const MAX_RETRIES = 5;
-    const delays = [0, 5000, 10000, 15000, 20000];
-    const headers = {};
-    const token = localStorage.getItem("access");
-    if (token) headers.Authorization = `Bearer ${token}`;
-    headers["Bypass-Tunnel-Reminder"] = "true";
+    const MAX_RETRIES = 12;
+    const delays = [0, 10000, 10000, 15000, 15000, 20000, 20000, 20000, 20000, 20000, 20000, 20000];
 
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
       if (attempt > 0) {
@@ -35,7 +31,7 @@ function Menu({ cart, setCart }) {
       }
 
       try {
-        const res = await axios.get(FOODS_URL, { timeout: 15000, headers });
+        const res = await axios.get(FOODS_URL, { timeout: 20000 });
         if (Array.isArray(res.data) && res.data.length > 0) {
           setFoods(res.data);
           setLoading(false);
@@ -71,7 +67,8 @@ function Menu({ cart, setCart }) {
     <>
       <Navbar />
 
-      <div className="container mt-5">
+      <div className="menu-page">
+        <div className="container mt-5">
         <div className="mb-4">
           <a href="/" className="btn btn-outline-primary">
             Home
@@ -121,9 +118,6 @@ function Menu({ cart, setCart }) {
               <div className="spinner-border text-success" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
-              <p className="mt-3 text-muted">
-                Waking up the server and loading menu... This may take a moment on first visit.
-              </p>
             </div>
           ) : loadError ? (
             <div className="text-center py-5">
@@ -153,6 +147,7 @@ function Menu({ cart, setCart }) {
               <h5>No food items found.</h5>
             </div>
           )}
+        </div>
         </div>
       </div>
     </>

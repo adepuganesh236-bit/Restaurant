@@ -1,2 +1,18 @@
 .vercel
 .env*
+
+# Local database backups (contain customer PII - never commit)
+backups/
+
+# Local databases - never commit customer data
+*.sqlite3
+*.sqlite3-journal
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Django build output
+staticfiles/

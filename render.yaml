@@ -1,3 +1,9 @@
+databases:
+  - name: restaurant-db
+    plan: free
+    databaseName: restaurant
+    user: restaurant
+
 services:
   - type: web
     name: restaurant-backend
@@ -6,3 +12,21 @@ services:
     rootDir: RestaurantBackend
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
     startCommand: "gunicorn RestaurantBackend.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: restaurant-db
+          property: connectionString
+      # Email credentials are required for password-reset OTP delivery.
+      # sync: false means Render prompts for the value in the dashboard instead
+      # of storing it in the blueprint.
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false

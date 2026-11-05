@@ -27,8 +27,8 @@ function Login() {
     e.preventDefault();
     setWaking(true);
 
-    const awake = await ensureBackendAwake();
-    if (!awake) {
+    const status = await ensureBackendAwake();
+    if (status !== "ok") {
       setWaking(false);
       alert("The server is taking unusually long to start. Please try again in a minute.");
       return;
@@ -37,6 +37,10 @@ function Login() {
 
     try {
       const response = await API.post("token/", user);
+
+      if (!response.data?.access || !response.data?.refresh) {
+        throw new Error("Login response did not include both tokens");
+      }
 
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
@@ -56,7 +60,7 @@ function Login() {
       } else if (!error.response || [502, 503, 504].includes(error.response.status)) {
         alert("Server is waking up (free tier). Please wait ~30s and try again.");
       } else {
-        alert("Login failed. Please try again. (" + error.response.status + ")");
+        alert("Login failed. Please try again. (" + (error.response?.status ?? "no response") + ")");
       }
     }
   };

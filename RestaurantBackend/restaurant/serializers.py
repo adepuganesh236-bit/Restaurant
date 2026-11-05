@@ -50,7 +50,24 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "__all__"
-        read_only_fields = ["user"]
+        read_only_fields = ["user", "total_price"]
+
+    def validate_food(self, value):
+        if not value.available:
+            raise serializers.ValidationError("This item is currently unavailable.")
+        return value
+
+    def validate_quantity(self, value):
+        if value < 1:
+            raise serializers.ValidationError("Quantity must be at least 1.")
+        return value
+
+    def update(self, instance, validated_data):
+        # Food is fixed at creation time; changing it would desync the price.
+        validated_data.pop("food", None)
+        if "quantity" in validated_data:
+            validated_data["total_price"] = instance.food.price * validated_data["quantity"]
+        return super().update(instance, validated_data)
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -58,6 +75,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = "__all__"
         read_only_fields = ["user"]
+
+    def validate_rating(self, value):
+        if not 1 <= value <= 5:
+            raise serializers.ValidationError("Rating must be between 1 and 5.")
+        return value
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):

@@ -7,6 +7,7 @@ function ForgotPassword() {
   const [step, setStep] = useState(1);
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
+  const [resetToken, setResetToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,7 +20,11 @@ function ForgotPassword() {
     setLoading(true);
     try {
       const res = await API.post("send-otp/", { phone });
-      alert("OTP sent! (For testing: " + res.data.otp + ")");
+      if (res.data.otp) {
+        alert("OTP sent! (For testing: " + res.data.otp + ")");
+      } else {
+        alert("OTP sent to your registered email.");
+      }
       setStep(2);
     } catch (error) {
       alert(error.response?.data?.error || "Phone number not found");
@@ -35,7 +40,8 @@ function ForgotPassword() {
     }
     setLoading(true);
     try {
-      await API.post("verify-otp/", { phone, otp });
+      const res = await API.post("verify-otp/", { phone, otp });
+      setResetToken(res.data.reset_token || "");
       alert("OTP verified!");
       setStep(3);
     } catch (error) {
@@ -52,7 +58,11 @@ function ForgotPassword() {
     }
     setLoading(true);
     try {
-      await API.post("reset-password/", { phone, new_password: newPassword });
+      await API.post("reset-password/", {
+        phone,
+        new_password: newPassword,
+        token: resetToken,
+      });
       alert("Password reset successfully! You can now login.");
       navigate("/login");
     } catch (error) {

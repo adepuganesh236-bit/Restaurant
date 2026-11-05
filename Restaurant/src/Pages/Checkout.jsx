@@ -11,18 +11,20 @@ function Checkout({ cart, setCart }) {
       return;
     }
 
+    if (!cart || cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+
     try {
       const orderIds = [];
       for (const item of cart) {
         const payload = {
           food: item.id,
           quantity: item.quantity || 1,
-          total_price: Number(item.price) * (item.quantity || 1),
         };
-        console.log("Posting order payload:", payload);
 
         const res = await API.post("orders/", payload);
-        console.log("Order created:", res.data);
         orderIds.push(res.data.id);
       }
 
@@ -34,10 +36,7 @@ function Checkout({ cart, setCart }) {
       navigate("/payment", { state: { total, orderIds } });
     } catch (error) {
       // show detailed server validation error when available
-      console.error("Order request failed:", error);
       if (error.response) {
-        console.error("Status:", error.response.status);
-        console.error("Response data:", error.response.data);
         alert(`Failed to place order: ${JSON.stringify(error.response.data)}`);
       } else {
         alert("Failed to place order: " + (error.message || "unknown error"));

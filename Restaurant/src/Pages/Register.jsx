@@ -29,7 +29,7 @@ function Register() {
     setWaking(true);
 
     const awake = await ensureBackendAwake();
-    if (!awake) {
+    if (awake !== "ok") {
       setWaking(false);
       alert("The server is taking unusually long to start. Please try again in a minute.");
       return;
