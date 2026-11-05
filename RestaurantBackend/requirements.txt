@@ -1,4 +1,4 @@
-asgiref==3.11.1
+asgiref==3.13.0
 click==8.4.1
 colorama==0.4.6
 Django==6.0.7
