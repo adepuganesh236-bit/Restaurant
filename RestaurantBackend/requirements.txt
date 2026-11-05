@@ -9,7 +9,7 @@ django-filter==25.1
 dj-database-url>=2.3
 gunicorn==26.0.0
 h11==0.16.0
-packaging==26.2
+packaging==26.3
 pillow==12.3.0
 psycopg[binary]>=3.2
 PyJWT==2.13.0
