@@ -16,5 +16,5 @@ PyJWT==2.13.0
 pytz==2026.2
 sqlparse==0.5.5
 tzdata==2026.2
-uvicorn==0.49.0
+uvicorn==0.54.0
 whitenoise==6.12.0
