@@ -101,9 +101,26 @@ class Command(BaseCommand):
             action="store_true",
             help="Report what would be created without writing to the database.",
         )
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Add missing defaults even when the menu already has foods.",
+        )
 
     def handle(self, *args, **options):
         dry_run = options["dry_run"]
+
+        # Bootstrap only. Running this on every deploy must not resurrect items
+        # an admin intentionally removed from the menu.
+        if Food.objects.exists() and not options["force"]:
+            self.stdout.write(
+                self.style.WARNING(
+                    "Menu already contains foods; skipping seed. "
+                    "Use --force to add missing defaults."
+                )
+            )
+            return
+
         existing = set(Food.objects.values_list("name", flat=True))
         pending = [food for food in FOODS if food[0] not in existing]
 
