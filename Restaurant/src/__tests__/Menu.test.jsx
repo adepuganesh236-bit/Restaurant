@@ -36,6 +36,23 @@ describe("Menu page", () => {
     expect(screen.getByText("Veg Biryani")).toBeInTheDocument();
   });
 
+  it("stops loading and shows an empty state when the API returns no foods", async () => {
+    axiosGet.mockResolvedValue({ data: [] });
+    apiMock.get.mockResolvedValue({ data: { active_users: 0 } });
+
+    render(
+      <MemoryRouter>
+        <Menu cart={[]} setCart={() => {}} />
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText(/No food items are available right now/i)
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument();
+    expect(axiosGet).toHaveBeenCalledTimes(1);
+  });
+
   it("filters by category", async () => {
     axiosGet.mockResolvedValue({ data: FOODS });
     apiMock.get.mockResolvedValue({ data: { active_users: 0 } });

@@ -19,8 +19,8 @@ const FALLBACK_BY_CATEGORY = {
   "Desserts": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80",
 };
 
-function FoodCard({ id, name, price, category, cart, setCart }) {
-  const [imgSrc, setImgSrc] = useState(getFoodImage(name, category));
+function FoodCard({ id, name, price, category, image, cart, setCart }) {
+  const [imgSrc, setImgSrc] = useState(image || getFoodImage(name, category));
 
   const handleAddToCart = () => {
     const item = { id, name, price: Number(price), quantity: 1 };

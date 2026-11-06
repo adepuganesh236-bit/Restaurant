@@ -3,13 +3,26 @@ import axios from "axios";
 import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
 
-const FOODS_URL = (import.meta.env.VITE_API_URL || "https://restaurant-backend-4phd.onrender.com/api/") + "foods/";
+const RAW_API_BASE =
+  import.meta.env.VITE_API_URL || "https://restaurant-backend-4phd.onrender.com/api/";
+const API_BASE = RAW_API_BASE.endsWith("/") ? RAW_API_BASE : `${RAW_API_BASE}/`;
+const FOODS_URL = `${API_BASE}foods/`;
 
 const CATEGORIES = ["All", "Starters", "Veg", "Non-Veg", "Drinks", "Ice Cream", "Desserts"];
 
 const CATEGORY_ORDER = ["Starters", "Veg", "Non-Veg", "Drinks", "Ice Cream", "Desserts"];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Four attempts are enough to ride out a Render cold start without leaving the
+// spinner running for minutes. A valid (even empty) response stops retrying.
+const RETRY_DELAYS = [0, 5000, 10000, 15000];
+
+const extractFoods = (data) => {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.results)) return data.results;
+  return null;
+};
 
 function Menu({ cart, setCart }) {
   const [search, setSearch] = useState("");
@@ -22,21 +35,20 @@ function Menu({ cart, setCart }) {
     setLoading(true);
     setLoadError(false);
 
-    const MAX_RETRIES = 12;
-    const delays = [0, 10000, 10000, 15000, 15000, 20000, 20000, 20000, 20000, 20000, 20000, 20000];
-
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    for (let attempt = 0; attempt < RETRY_DELAYS.length; attempt++) {
       if (attempt > 0) {
-        await sleep(delays[attempt] || delays[delays.length - 1]);
+        await sleep(RETRY_DELAYS[attempt]);
       }
 
       try {
         const res = await axios.get(FOODS_URL, { timeout: 20000 });
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          setFoods(res.data);
+        const items = extractFoods(res.data);
+        if (items) {
+          setFoods(items);
           setLoading(false);
           return;
         }
+        console.error("Menu fetch returned an unexpected response shape");
       } catch (error) {
         console.error(`Menu fetch attempt ${attempt + 1} failed:`, error.message);
       }
@@ -129,6 +141,16 @@ function Menu({ cart, setCart }) {
                 Retry
               </button>
             </div>
+          ) : foods.length === 0 ? (
+            <div className="text-center py-5">
+              <h5>No food items are available right now.</h5>
+              <p className="text-muted mb-3">
+                The menu is empty. Please check back soon.
+              </p>
+              <button className="btn btn-success" onClick={() => fetchFoods()}>
+                Retry
+              </button>
+            </div>
           ) : filteredFoods.length > 0 ? (
             filteredFoods.map((food) => (
               <div className="col-md-4 col-lg-3 mb-4" key={food.id}>
@@ -137,6 +159,7 @@ function Menu({ cart, setCart }) {
                   name={food.name}
                   price={food.price}
                   category={food.category}
+                  image={food.image}
                   cart={cart}
                   setCart={setCart}
                 />

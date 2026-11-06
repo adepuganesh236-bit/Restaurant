@@ -29,6 +29,25 @@ describe("FoodCard component", () => {
     ]);
   });
 
+  it("uses the image returned by the API when available", () => {
+    render(
+      <FoodCard
+        id={3}
+        name="Chicken Biryani"
+        price={250}
+        category="Non-Veg"
+        image="https://example.com/biryani.jpg"
+        cart={[]}
+        setCart={() => {}}
+      />
+    );
+
+    expect(screen.getByRole("img")).toHaveAttribute(
+      "src",
+      "https://example.com/biryani.jpg"
+    );
+  });
+
   it("appends to an existing cart", () => {
     const setCart = vi.fn();
     const existing = [{ id: 9, name: "Cola", price: 40, quantity: 1 }];
