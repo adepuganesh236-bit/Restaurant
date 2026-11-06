@@ -1,6 +1,7 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "installCommand": "cd Restaurant && npm ci",
+  "buildCommand": "cd Restaurant && npm run build",
+  "outputDirectory": "Restaurant/dist",
   "framework": "vite",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
